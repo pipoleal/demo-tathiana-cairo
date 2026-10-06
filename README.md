@@ -26,7 +26,7 @@ Site demo da **Dra. Tathiana Cairo — Harmonização Corporal e Emagrecimento**
 
 Tudo fica no objeto `CONFIG`, no início do `<script>`:
 
-- `registro`: **trocar `CREFITO-3 [NÚMERO]` pelo número real** (aparece no rodapé e no card de formação).
+- `registro`: hoje mostra só "CREFITO-3" (demo). **Acrescente o número real** antes de virar site oficial (aparece no rodapé e no card de formação).
 - `locais[1]` (Santos): **trocar `[ENDEREÇO EM SANTOS]`** e o `cep`. Enquanto começar com `[`, o site mostra "Endereço completo confirmado no agendamento" e o mapa aponta para a cidade. Para mostrar "Aberto agora" em Santos, preencha `abre`/`fecha` (e os `periodos`, com hora).
 - `nota`, `avaliacoes`, `seguidores`: números da prova social.
 - `feriados` (nacionais + SP) e `locais[].feriados` (municipais): dias bloqueados no agendamento.
@@ -43,7 +43,7 @@ Tudo fica no objeto `CONFIG`, no início do `<script>`:
 - [x] Sem promessa de resultado (nada de medidas, prazos ou "perca X").
 - [x] Sem antes e depois e sem fotos de corpo.
 - [x] Aviso no rodapé: "Os resultados variam de pessoa para pessoa e dependem de avaliação individual."
-- [x] Espaço para o registro profissional: "Dra. Tathiana Cairo — CREFITO-3 [NÚMERO]".
+- [x] Espaço para o registro profissional: "Dra. Tathiana Cairo — CREFITO-3" (falta o número).
 - [x] Depoimentos reais do Google, sem nome ("Cliente no Google").
 - [ ] **Confirmar**: número do CREFITO-3.
 - [ ] **Confirmar**: endereço e horário em Santos.
