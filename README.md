@@ -2,23 +2,30 @@
 
 Site demo da **Dra. Tathiana Cairo — Harmonização Corporal e Emagrecimento** (Juquehy, São Sebastião – SP, e Santos – SP). HTML, CSS e JS puro, sem build.
 
-## Direção visual (opção B · Café Noturno)
+## Direção visual (arte do designer, aplicada em 07/10/2026)
 
-- **Paleta terrosa**: marrom-café `#2F211B` como base, caramelo `#C99468` / `#E2BC97`, nude `#E7D5C3`, areia `#F1E7DA` e off-white `#FAF6F0`. Sem rosa.
-- **Ritmo**: hero, pós-operatório, agendamento e rodapé em café; as demais seções em off-white e areia.
-- **Tipografia**: uma família só, **Jost** (hospedada em `fonts/`). Sem itálico nos títulos e sem numeração de seção.
-- **Consistência**: um raio (`--r: 18px`), uma sombra (`--sombra`) e uma escala de espaço (`--e1…--e5`) usados em tudo.
-- **Marca**: coração marrom 🤎 (desenhado em SVG no site; emoji só na mensagem do WhatsApp).
-- **Ilustração**: praia de Juquehy (sol, ilha, mar e dunas) em SVG, nas cores da marca. Não há foto de banco nem foto de corpo.
+- **Base**: arte do designer no Canva (PDF), com fundo café `#44291E` e textura geométrica, cards `#4F3023`, botões nude `#E1C5A9`, rótulos `#DFBA97`, botão escuro `#633E2D` e textos em branco.
+- **Tipografia**: uma família só, **Belleza** (a fonte dos títulos da arte), hospedada em `fonts/`. Sem itálico e sem negrito sintético.
+- **Consistência**: um raio (`--r: 20px`), uma sombra (`--sombra`) e uma escala de espaço (`--e1…--e5`) usados em tudo.
+- **Fotos**: retrato real da Dra. Tathiana (recortado), espaço de atendimento, tratamentos e pós-operatório, todas extraídas do kit do designer e convertidas para WebP em `img/`.
+- **Ajustes em relação à arte**:
+  - Belleza em tudo, no lugar de Belleza + Crave Sans + Open Sans itálico.
+  - Sem selo azul de verificado no Instagram, e com o @ corrigido para `@dratathianacairo`.
+  - Foto da fita métrica (Emagrecimento) trocada por um recorte de bem-estar, para não sugerir promessa de medidas.
+  - Foto do pós-operatório recortada sem os círculos de evolução da cicatriz, para não ficar como antes e depois.
+  - Etapas com coroa de folhas e ícone, sem numeração, e título "Do primeiro contato ao acompanhamento", sem prometer resultado.
+  - Cards de tratamento com os nomes e textos reais, já que na arte os 5 repetiam "Harmonização Corporal".
+  - O avatar cinza das avaliações saiu; ficam os depoimentos em carrossel com "Cliente no Google".
+- **Fora da arte**: agendamento pelo WhatsApp, locais com mapa e "Aberto agora", e rodapé, já no visual novo.
 
 ## Seções (8)
 
-1. Hero: nome, frase oficial, selo Fisioterapeuta, nota 5,0, 7,7 mil seguidores, Agendar
-2. Por que com uma fisioterapeuta
+1. Hero: foto da Dra., "Dra. Tathiana Cairo · Fisioterapeuta", título da arte, nota 5,0, 7,7 mil seguidores, Agendar
+2. Sobre: por que com uma fisioterapeuta
 3. Tratamentos: os 5 serviços oficiais + card de avaliação, preço "consulte"
 4. Pós-operatório (drenagem, com cirurgia e liberação médica)
 5. Como funciona: avaliação → protocolo → sessões → acompanhamento
-6. Avaliações reais do Google + Instagram
+6. Avaliações reais do Google (carrossel) + Instagram
 7. Agendamento pelo WhatsApp
 8. Locais (abas Juquehy / Santos)
 
