@@ -83,6 +83,7 @@ svg{display:block}
 img,iframe{display:block;max-width:100%}
 button,input,select,textarea{font:inherit;color:inherit}
 a,button,label{-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 :focus-visible{outline:2px solid var(--nude);outline-offset:3px}
 .wrap{width:min(1180px,100% - 32px);margin-inline:auto}
 .pular{position:absolute;left:-999px;top:8px;z-index:200;background:var(--nude);color:var(--tinta);padding:var(--e1) var(--e2);border-radius:var(--r)}
@@ -313,7 +314,7 @@ legend,.campo>label{display:block;font-size:17px;color:var(--nude);margin-bottom
 .dias button[aria-pressed=true] small{color:#5A3E30}
 .dias button[aria-pressed=true] b{color:var(--tinta)}
 .outra{display:flex;align-items:center;gap:var(--e1);margin-top:var(--e1);font-size:15px;color:var(--suave)}
-input[type=text],input[type=date]{width:100%;min-height:50px;padding:10px 14px;border-radius:var(--r);border:1px solid var(--linha);background:var(--fundo);color:var(--branco);font-size:16px;color-scheme:dark}
+input[type=text],input[type=tel],input[type=date]{width:100%;min-height:50px;padding:10px 14px;border-radius:var(--r);border:1px solid var(--linha);background:var(--fundo);color:var(--branco);font-size:16px;color-scheme:dark}
 input::placeholder{color:#A8917F}
 .outra input{width:auto;flex:1;min-height:46px}
 input[aria-invalid=true]{border-color:#E39A82}
@@ -329,6 +330,22 @@ input[aria-invalid=true]{border-color:#E39A82}
 .bolha{background:var(--nude-2);color:var(--tinta);border-radius:var(--r);padding:var(--e2);font-size:16px;line-height:1.55;white-space:pre-wrap;word-break:break-word}
 .lado .btn{width:100%}
 .lado small{font-size:15px;color:var(--suave);text-align:center}
+.horas{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:var(--e1)}
+.horas button{min-height:46px;border-radius:var(--r);border:1px solid var(--linha);background:var(--fundo);color:var(--branco);font:400 17px/1 var(--fonte);cursor:pointer;transition:background .2s,border-color .2s}
+.horas button[aria-pressed=true]{background:var(--nude);border-color:var(--nude);color:var(--tinta)}
+.horas .vazio{grid-column:1/-1;font-size:15px;color:var(--suave)}
+.dias button.lotado{opacity:.45}
+.dias button.lotado b{text-decoration:line-through}
+.consent{display:flex!important;gap:10px;align-items:flex-start;font-size:15px!important;color:var(--suave)!important;cursor:pointer}
+.consent input{width:20px;height:20px;min-height:0;margin-top:2px;accent-color:var(--nude);flex:none}
+.armadilha{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.reservado[hidden]{display:none}
+.reservado{display:flex;flex-direction:column;gap:var(--e2);align-items:flex-start;background:var(--card-2)}
+.reservado .coracao{width:30px;height:30px;color:var(--nude)}
+.reservado h3{font-size:24px}
+.reservado p{color:var(--texto)}
+.reservado .btn{width:100%}
+#btnEnviar[aria-busy=true]{opacity:.7;pointer-events:none}
 @media (min-width:960px){.agendar .grade{grid-template-columns:1.25fr .75fr;align-items:start}.lado{position:sticky;top:100px}}
 
 /* =========================================================
@@ -633,15 +650,26 @@ input[aria-invalid=true]{border-color:#E39A82}
           <div class="outra"><label for="dia">Outra data:</label><input type="date" id="dia" aria-describedby="eDia"></div>
           <span class="erro" id="eDia" aria-live="polite"></span>
         </fieldset>
-        <fieldset>
+        <fieldset id="blocoPeriodo">
           <legend>Período</legend>
           <div class="opcoes dois" id="chipsPeriodo"></div>
+        </fieldset>
+        <fieldset id="blocoHora" hidden>
+          <legend id="lHora">Horário</legend>
+          <div class="horas" id="horas" role="group" aria-labelledby="lHora" aria-describedby="eHora"></div>
+          <span class="erro" id="eHora" aria-live="polite"></span>
         </fieldset>
         <div class="campo">
           <label for="nome">Seu nome</label>
           <input type="text" id="nome" autocomplete="name" placeholder="Nome e sobrenome" aria-describedby="eNome">
           <span class="erro" id="eNome" aria-live="polite"></span>
         </div>
+        <div class="campo" id="blocoTel" hidden>
+          <label for="tel">Seu WhatsApp</label>
+          <input type="tel" id="tel" autocomplete="tel" inputmode="tel" placeholder="(12) 90000-0000" aria-describedby="eTel">
+          <span class="erro" id="eTel" aria-live="polite"></span>
+        </div>
+        <div class="armadilha" aria-hidden="true"><label>Empresa <input type="text" id="empresa" tabindex="-1" autocomplete="off"></label></div>
         <fieldset>
           <legend>É pós-operatório?</legend>
           <div class="opcoes dois">
@@ -668,14 +696,25 @@ input[aria-invalid=true]{border-color:#E39A82}
           </fieldset>
           <p class="nota-lib" id="notaLib">Leve a liberação na primeira sessão.</p>
         </div>
+        <div class="campo" id="blocoConsent" hidden>
+          <label class="consent"><input type="checkbox" id="consent" aria-describedby="eConsent"><span>Concordo que meu nome e WhatsApp sejam usados só para este agendamento.</span></label>
+          <span class="erro" id="eConsent" aria-live="polite"></span>
+        </div>
       </form>
       <div class="lado rv d1">
         <div class="previa card">
           <span class="tit"><svg aria-hidden="true"><use href="#i-zap"/></svg>Prévia da mensagem</span>
           <div class="bolha" id="bolha" aria-live="polite"></div>
         </div>
-        <button class="btn btn-p" type="submit" form="form"><svg aria-hidden="true"><use href="#i-zap"/></svg>Enviar pelo WhatsApp</button>
-        <small>O horário exato é confirmado pela Dra. Tathiana, de acordo com a agenda do dia.</small>
+        <button class="btn btn-p" type="submit" form="form" id="btnEnviar"><svg aria-hidden="true"><use href="#i-zap"/></svg><span>Enviar pelo WhatsApp</span></button>
+        <small id="notaEnvio">O horário exato é confirmado pela Dra. Tathiana, de acordo com a agenda do dia.</small>
+        <div class="reservado card" id="reservado" hidden role="status" tabindex="-1">
+          <svg class="coracao" aria-hidden="true"><use href="#i-coracao"/></svg>
+          <h3>Horário reservado!</h3>
+          <p id="reservadoTxt"></p>
+          <a class="btn btn-p" id="reservadoZap" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-zap"/></svg>Avisar no WhatsApp</a>
+          <button class="btn btn-s" type="button" id="novaReserva">Fazer outro agendamento</button>
+        </div>
       </div>
     </div>
   </div>
@@ -762,6 +801,8 @@ const CONFIG = {
   feriados: { "01-01": "Ano-Novo", "04-21": "Tiradentes", "05-01": "Dia do Trabalho", "07-09": "Revolução Constitucionalista",
     "09-07": "Independência", "10-12": "Nossa Senhora Aparecida", "11-02": "Finados", "11-15": "Proclamação da República",
     "11-20": "Consciência Negra", "12-25": "Natal" },
+  // Agenda online (API de horários). Sem "api", o site usa o agendamento só por WhatsApp.
+  agenda: { api: "", clinica: "tathiana-cairo" },
   devLink: "https://github.com/pipoleal"
 };
 
@@ -831,8 +872,72 @@ addEventListener("scroll", aoRolar, { passive: true }); aoRolar();
 /* =========================================================
    Agendamento
    ========================================================= */
-const form = $("#form"), dia = $("#dia"), nome = $("#nome"), cirurgia = $("#cirurgia");
+const form = $("#form"), dia = $("#dia"), nome = $("#nome"), cirurgia = $("#cirurgia"), tel = $("#tel"), consent = $("#consent");
 let tratEscolhido = "avaliacao", localEscolhido = CONFIG.locais[0], diaEscolhido = "", periodoEscolhido = localEscolhido.periodos[0].id;
+
+/* ---------- Agenda online (horários reais) ----------
+   Se a API responder, os dias mostram quantos horários estão livres e a cliente escolhe o horário.
+   Se não responder, ou se o local não tiver agenda online, tudo funciona como antes (período + WhatsApp). */
+const AG = { api: (new URLSearchParams(location.search).get("agendaApi") || CONFIG.agenda?.api || "").replace(/\/$/, ""), online: false, locais: {}, disp: {}, carregando: false, hora: "", reserva: null };
+const urlAg = c => `${AG.api}/api/${CONFIG.agenda.clinica}/${c}`;
+const comPrazo = (p, ms = 6000) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("tempo")), ms))]);
+const modoOnline = () => AG.online && AG.locais[localEscolhido.id];
+const chaveDisp = () => `${localEscolhido.id}|${tratEscolhido}`;
+const diaDisp = s => AG.disp[chaveDisp()]?.[s];
+const temVaga = s => (diaDisp(s)?.livres.length || 0) > 0;
+
+async function iniciarAgenda() {
+  if (!AG.api) return;
+  try {
+    const r = await comPrazo(fetch(urlAg("config")));
+    if (!r.ok) throw new Error("config");
+    const c = await r.json();
+    c.locais.forEach(l => AG.locais[l.id] = l.agendaOnline);
+    AG.online = true;
+    $(".agendar .lead").textContent = "Escolha o tratamento, o local, o dia e um horário livre. Ele fica reservado na hora, e a Dra. Tathiana confirma com você pelo WhatsApp.";
+    await carregarDisp();
+  } catch { AG.online = false; aplicarModo(); }
+}
+async function carregarDisp() {
+  aplicarModo();
+  if (!modoOnline() || AG.disp[chaveDisp()]) { montarDias(); montarHoras(); atualizar(); return; }
+  const chave = chaveDisp(); AG.carregando = true; montarHoras();
+  try {
+    const r = await comPrazo(fetch(urlAg(`disponibilidade?local=${localEscolhido.id}&tratamento=${tratEscolhido}&dias=45`), { cache: "no-store" }));
+    if (!r.ok) throw new Error("disp");
+    const d = await r.json();
+    AG.disp[chave] = Object.fromEntries(d.dias.map(x => [x.data, x]));
+  } catch { AG.online = false; }
+  AG.carregando = false;
+  aplicarModo();
+  if (diaEscolhido && modoOnline() && !temVaga(diaEscolhido)) { diaEscolhido = ""; dia.value = ""; }
+  if (!modoOnline() && diaEscolhido) { const e = validarDia(diaEscolhido); if (e) { diaEscolhido = ""; dia.value = ""; } }
+  montarDias(); montarHoras(); atualizar();
+}
+function invalidarDisp() { AG.disp = {}; }
+function aplicarModo() {
+  const on = !!modoOnline();
+  $("#blocoPeriodo").hidden = on; $("#blocoHora").hidden = !on; $("#blocoTel").hidden = !on; $("#blocoConsent").hidden = !on;
+  $("#lDia").textContent = on ? "Dia (horários livres)" : "Dia útil";
+  $("#btnEnviar span").textContent = on ? "Reservar e enviar no WhatsApp" : "Enviar pelo WhatsApp";
+  $("#notaEnvio").textContent = on ? "O horário fica reservado para você e a Dra. Tathiana confirma pelo WhatsApp." :
+    AG.online ? `Em ${localEscolhido.nome}, o horário é combinado direto com a Dra. Tathiana pelo WhatsApp.` : "O horário exato é confirmado pela Dra. Tathiana, de acordo com a agenda do dia.";
+}
+function montarHoras() {
+  const box = $("#horas");
+  if (!modoOnline()) { box.replaceChildren(); return; }
+  const aviso = txt => { const p = document.createElement("p"); p.className = "vazio"; p.textContent = txt; box.replaceChildren(p); };
+  if (AG.carregando) return aviso("Buscando horários livres…");
+  if (!diaEscolhido) return aviso("Escolha um dia para ver os horários.");
+  const livres = diaDisp(diaEscolhido)?.livres || [];
+  if (!livres.length) return aviso("Não há horários livres nesse dia.");
+  if (!livres.includes(AG.hora)) AG.hora = "";
+  box.replaceChildren(...livres.map(h => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = h; b.setAttribute("aria-pressed", h === AG.hora);
+    b.addEventListener("click", () => { AG.hora = h; erro($("#horas"), ""); montarHoras(); atualizar(); });
+    return b;
+  }));
+}
 
 function opcao(nomeGrupo, valor, marcado, html, aoMudar) {
   const l = document.createElement("label");
@@ -844,7 +949,7 @@ function opcao(nomeGrupo, valor, marcado, html, aoMudar) {
 }
 const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function montarTrat() {
-  $("#chipsTrat").replaceChildren(...CONFIG.tratamentos.map(t => opcao("trat", t.id, t.id === tratEscolhido, esc(t.nome), () => { tratEscolhido = t.id; atualizar(); })));
+  $("#chipsTrat").replaceChildren(...CONFIG.tratamentos.map(t => opcao("trat", t.id, t.id === tratEscolhido, esc(t.nome), () => { tratEscolhido = t.id; AG.hora = ""; carregarDisp(); })));
 }
 function montarLocais() {
   $("#chipsLocal").replaceChildren(...CONFIG.locais.map(l => opcao("local", l.id, l === localEscolhido, `${esc(l.nome)}<small>${esc(l.cidade)}</small>`, () => escolherLocal(l))));
@@ -853,31 +958,45 @@ function montarPeriodos() {
   $("#chipsPeriodo").replaceChildren(...localEscolhido.periodos.map(p => opcao("periodo", p.id, p.id === periodoEscolhido, `${esc(p.rot)}${p.hora ? `<small>${esc(p.hora)}</small>` : ""}`, () => { periodoEscolhido = p.id; atualizar(); })));
 }
 function escolherLocal(l) {
-  localEscolhido = l; periodoEscolhido = l.periodos[0].id;
-  montarLocais(); montarPeriodos(); montarDias();
+  localEscolhido = l; periodoEscolhido = l.periodos[0].id; AG.hora = "";
+  montarLocais(); montarPeriodos();
   if (diaEscolhido) { const e = validarDia(diaEscolhido); if (e) { diaEscolhido = ""; dia.value = ""; erro(dia, ...e); } }
-  atualizar();
+  carregarDisp();
+}
+// Próximos dias para os botões: com a agenda online, só dias de atendimento (lotados aparecem riscados).
+function listaDias() {
+  if (modoOnline() && AG.disp[chaveDisp()]) return Object.values(AG.disp[chaveDisp()]).filter(x => x.aberto && x.data >= sp.data && (x.livres.length || x.data > sp.data)).slice(0, 5).map(x => x.data);
+  const lista = [primeiroDia(localEscolhido)]; while (lista.length < 5) lista.push(proximoUtil(lista[lista.length - 1], localEscolhido));
+  return lista;
 }
 function montarDias() {
-  const lista = [primeiroDia(localEscolhido)]; while (lista.length < 5) lista.push(proximoUtil(lista[lista.length - 1], localEscolhido));
+  const lista = listaDias(), on = modoOnline() && AG.disp[chaveDisp()];
   const amanha = somar(sp.data, 1);
-  dia.min = lista[0];
+  dia.min = lista[0] || sp.data;
   $("#dias").replaceChildren(...lista.map(s => {
     const b = document.createElement("button"); b.type = "button"; b.dataset.dia = s;
-    const dt = deISO(s);
+    const dt = deISO(s), n = on ? diaDisp(s)?.livres.length || 0 : null;
     const rot = s === sp.data ? "hoje" : s === amanha ? "amanhã" : dt.toLocaleDateString("pt-BR", { weekday: "short" }).replace(".", "");
     b.innerHTML = "<small></small><b></b><small></small>";
     b.children[0].textContent = rot; b.children[1].textContent = dt.getDate();
-    b.children[2].textContent = dt.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "");
-    b.setAttribute("aria-label", fmtLongo(s));
+    b.children[2].textContent = on ? (n ? `${n} ${n === 1 ? "horário" : "horários"}` : "lotado") : dt.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "");
+    if (on && !n) b.classList.add("lotado");
+    b.setAttribute("aria-label", fmtLongo(s) + (on ? (n ? `, ${n} horários livres` : ", lotado") : ""));
     b.setAttribute("aria-pressed", s === diaEscolhido);
     b.addEventListener("click", () => escolherDia(s));
     return b;
   }));
 }
+function proximoComVaga(s) {
+  const d = AG.disp[chaveDisp()]; if (!d) return null;
+  return Object.keys(d).sort().find(x => x > s && d[x].livres.length) || null;
+}
 function escolherDia(s) {
-  diaEscolhido = s; dia.value = s; erro(dia, "");
-  $$("#dias button").forEach(b => b.setAttribute("aria-pressed", b.dataset.dia === s)); atualizar();
+  const e = validarDia(s);
+  $$("#dias button").forEach(b => b.setAttribute("aria-pressed", b.dataset.dia === s && !e));
+  if (e) { diaEscolhido = ""; dia.value = s; erro(dia, ...e); montarHoras(); atualizar(); return; }
+  diaEscolhido = s; dia.value = s; erro(dia, ""); AG.hora = "";
+  montarHoras(); atualizar();
 }
 function erro(campo, msg, sug) {
   campo.setAttribute("aria-invalid", msg ? "true" : "false");
@@ -887,36 +1006,37 @@ function erro(campo, msg, sug) {
 function validarDia(s) {
   const L = localEscolhido, p = primeiroDia(L);
   if (!s) return ["Escolha um dia útil."];
-  if (s < p) return [s < sp.data ? "Essa data já passou. Escolha a partir de hoje." : "Para hoje não há mais horário.", p];
-  if (!L.dias.includes(deISO(s).getDay())) return ["O atendimento é de segunda a sexta.", proximoUtil(s, L)];
-  const f = feriado(s, L); if (f) return [`Feriado (${f}): não há atendimento.`, proximoUtil(s, L)];
+  if (s < p) return [s < sp.data ? "Essa data já passou. Escolha a partir de hoje." : "Para hoje não há mais horário.", modoOnline() ? proximoComVaga(s) : p];
+  if (!L.dias.includes(deISO(s).getDay())) return ["O atendimento é de segunda a sexta.", modoOnline() ? proximoComVaga(s) : proximoUtil(s, L)];
+  const f = feriado(s, L); if (f) return [`Feriado (${f}): não há atendimento.`, modoOnline() ? proximoComVaga(s) : proximoUtil(s, L)];
+  if (modoOnline() && AG.disp[chaveDisp()]) {
+    const x = diaDisp(s);
+    if (!x) return ["Esse dia ainda não está aberto na agenda online. Escolha uma data mais próxima ou chame no WhatsApp."];
+    if (!x.livres.length) return [x.aberto ? "Esse dia está lotado." : "Não há atendimento nesse dia.", proximoComVaga(s)];
+  }
   return null;
 }
-dia.addEventListener("change", () => {
-  const e = validarDia(dia.value);
-  $$("#dias button").forEach(b => b.setAttribute("aria-pressed", b.dataset.dia === dia.value));
-  if (e) { diaEscolhido = ""; erro(dia, ...e); } else { diaEscolhido = dia.value; erro(dia, ""); }
-  atualizar();
-});
+dia.addEventListener("change", () => escolherDia(dia.value));
 const posop = () => form.querySelector("input[name=posop]:checked").value === "sim";
 const lib = () => form.querySelector("input[name=lib]:checked").value === "sim";
 $("#dataCirurgia").max = sp.data;
 
 function mensagem() {
-  const t = CONFIG.tratamentos.find(x => x.id === tratEscolhido), L = localEscolhido, p = L.periodos.find(x => x.id === periodoEscolhido);
-  const linhas = [`Olá, ${CONFIG.nome}! 🤎 Vim pelo site e gostaria de agendar um horário.`, "",
+  const t = CONFIG.tratamentos.find(x => x.id === tratEscolhido), L = localEscolhido, p = L.periodos.find(x => x.id === periodoEscolhido), on = modoOnline();
+  const linhas = [on ? `Olá, ${CONFIG.nome}! 🤎 Acabei de reservar um horário pelo site.` : `Olá, ${CONFIG.nome}! 🤎 Vim pelo site e gostaria de agendar um horário.`, "",
     `• Nome: ${nome.value.trim() || "—"}`,
     `• Tratamento: ${t.nome}`,
     `• Local: ${L.nome}`,
-    `• Dia preferido: ${diaEscolhido ? fmtLongo(diaEscolhido) : "—"}`,
-    `• Período: ${p.rot.toLowerCase()}${p.hora ? ` (${p.hora})` : ""}`,
-    `• Pós-operatório: ${posop() ? "sim" : "não"}`];
+    on ? `• Dia: ${AG.reserva ? fmtLongo(AG.reserva.data) : diaEscolhido ? fmtLongo(diaEscolhido) : "—"}` : `• Dia preferido: ${diaEscolhido ? fmtLongo(diaEscolhido) : "—"}`,
+    on ? `• Horário: ${AG.reserva?.hora || AG.hora || "—"}` : `• Período: ${p.rot.toLowerCase()}${p.hora ? ` (${p.hora})` : ""}`,
+    AG.reserva ? `• Reserva nº ${AG.reserva.id}` : null,
+    `• Pós-operatório: ${posop() ? "sim" : "não"}`].filter(x => x !== null);
   if (posop()) {
     const dc = $("#dataCirurgia").value;
     linhas.push(`• Cirurgia: ${cirurgia.value.trim() || "—"}${dc ? `, feita em ${deISO(dc).toLocaleDateString("pt-BR")}` : ""}`);
     linhas.push(`• Liberação médica: ${lib() ? "já tenho" : "ainda não tenho"}`);
   }
-  linhas.push("", "Fico no aguardo para confirmar o horário. Agradeço desde já!");
+  linhas.push("", on ? "Fico no aguardo da confirmação. Agradeço desde já!" : "Fico no aguardo para confirmar o horário. Agradeço desde já!");
   return linhas.join("\n");
 }
 function atualizar() {
@@ -927,21 +1047,62 @@ function atualizar() {
 form.addEventListener("input", atualizar); form.addEventListener("change", atualizar);
 nome.addEventListener("input", () => { if (nome.value.trim()) erro(nome, ""); });
 cirurgia.addEventListener("input", () => { if (cirurgia.value.trim()) erro(cirurgia, ""); });
-form.addEventListener("submit", e => {
+tel.addEventListener("input", () => { if (tel.value.replace(/\D/g, "").length >= 10) erro(tel, ""); });
+consent.addEventListener("change", () => { if (consent.checked) erro(consent, ""); });
+
+form.addEventListener("submit", async e => {
   e.preventDefault();
+  const on = modoOnline();
   const ed = validarDia(diaEscolhido); if (ed) erro(dia, ...ed);
+  const semHora = on && !ed && !AG.hora; if (semHora) erro($("#horas"), "Escolha um horário.");
   const semNome = !nome.value.trim(); if (semNome) erro(nome, "Informe o seu nome.");
+  const digitos = tel.value.replace(/\D/g, ""), semTel = on && (digitos.length < 10 || digitos.length > 13); if (semTel) erro(tel, "Informe seu WhatsApp com DDD.");
   const semCir = posop() && !cirurgia.value.trim(); if (semCir) erro(cirurgia, "Conte qual cirurgia você fez.");
-  if (ed) { $("#dias button").focus(); return; }
+  const semConsent = on && !consent.checked; if (semConsent) erro(consent, "Marque para podermos reservar seu horário.");
+  if (ed) { ($("#dias button") || dia).focus(); return; }
+  if (semHora) { ($("#horas button") || $("#horas")).focus?.(); return; }
   if (semNome) { nome.focus(); return; }
+  if (semTel) { tel.focus(); return; }
   if (semCir) { cirurgia.focus(); return; }
-  window.open(linkZap(mensagem()), "_blank", "noopener");
+  if (semConsent) { consent.focus(); return; }
+  if (!on) { window.open(linkZap(mensagem()), "_blank", "noopener"); return; }
+
+  // Abre a aba já no clique (senão o navegador bloqueia a janela aberta depois da resposta).
+  const aba = window.open("", "_blank");
+  const btn = $("#btnEnviar"); btn.setAttribute("aria-busy", "true");
+  try {
+    const r = await comPrazo(fetch(urlAg("reservas"), { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ local: localEscolhido.id, tratamento: tratEscolhido, data: diaEscolhido, hora: AG.hora, nome: nome.value.trim(), telefone: digitos, consentimento: true, empresa: $("#empresa").value }) }), 10000);
+    const c = await r.json().catch(() => ({}));
+    if (r.status === 409) {
+      aba?.close(); invalidarDisp(); AG.hora = ""; await carregarDisp();
+      erro($("#horas"), c.erro || "Esse horário acabou de ser reservado. Escolha outro."); $("#horas").scrollIntoView({ block: "center", behavior: "smooth" }); return;
+    }
+    if (!r.ok) { aba?.close(); const campo = { nome, telefone: tel, consentimento: consent }[c.campo] || $("#horas"); erro(campo, c.erro || "Não foi possível reservar. Tente de novo."); return; }
+    AG.reserva = c.reserva; atualizar();
+    const link = linkZap(mensagem());
+    if (aba) aba.location.href = link;
+    $("#reservadoTxt").textContent = `${fmtLongo(c.reserva.data).replace(/^./, x => x.toUpperCase())}, às ${c.reserva.hora}, em ${c.reserva.local}. Reserva nº ${c.reserva.id}. A Dra. Tathiana confirma com você pelo WhatsApp.`;
+    $("#reservadoZap").href = link;
+    $("#reservado").hidden = false; $("#btnEnviar").hidden = true; $("#notaEnvio").hidden = true;
+    $("#reservado").focus();
+    invalidarDisp(); carregarDisp();
+  } catch {
+    // API fora do ar: segue pelo WhatsApp como antes, para não perder a cliente.
+    const link = linkZap(mensagem());
+    if (aba) aba.location.href = link; else window.open(link, "_blank", "noopener");
+  } finally { btn.removeAttribute("aria-busy"); }
+});
+$("#novaReserva").addEventListener("click", () => {
+  AG.reserva = null; AG.hora = ""; diaEscolhido = ""; dia.value = "";
+  $("#reservado").hidden = true; $("#btnEnviar").hidden = false; $("#notaEnvio").hidden = false;
+  montarDias(); montarHoras(); atualizar(); $("#agendar").scrollIntoView({ behavior: "smooth" });
 });
 const marcarPosop = sim => { form.querySelector(`input[name=posop][value=${sim ? "sim" : "nao"}]`).checked = true; };
-$$("[data-trat]").forEach(a => a.addEventListener("click", () => { tratEscolhido = a.dataset.trat; marcarPosop(false); montarTrat(); atualizar(); }));
-$("#ctaPosop").addEventListener("click", () => { tratEscolhido = "manuais"; marcarPosop(true); montarTrat(); atualizar(); });
+$$("[data-trat]").forEach(a => a.addEventListener("click", () => { tratEscolhido = a.dataset.trat; marcarPosop(false); montarTrat(); AG.hora = ""; carregarDisp(); }));
+$("#ctaPosop").addEventListener("click", () => { tratEscolhido = "manuais"; marcarPosop(true); montarTrat(); AG.hora = ""; carregarDisp(); });
 
-montarTrat(); montarLocais(); montarPeriodos(); montarDias(); atualizar();
+montarTrat(); montarLocais(); montarPeriodos(); montarDias(); atualizar(); aplicarModo(); iniciarAgenda();
 
 /* =========================================================
    Locais: abas, mapa e "Aberto agora"

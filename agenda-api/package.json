@@ -1,0 +1,15 @@
+{
+  "name": "agenda-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrar:local": "wrangler d1 migrations apply agenda --local",
+    "db:migrar": "wrangler d1 migrations apply agenda --remote",
+    "senha": "node scripts/senha.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.151.1"
+  }
+}

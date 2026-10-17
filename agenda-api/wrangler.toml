@@ -1,0 +1,17 @@
+name = "agenda-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Painel administrativo estático (public/admin), servido pelo próprio Worker.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "agenda"
+database_id = "PREENCHER-com-o-id-do-wrangler-d1-create"
+migrations_dir = "migrations"
+
+# Segredo da sessão do painel: `npx wrangler secret put SESSION_SECRET`
+# (em desenvolvimento local fica em .dev.vars, fora do git).
