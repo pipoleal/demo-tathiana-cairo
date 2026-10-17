@@ -60,6 +60,21 @@ npm run dev                                    # API e painel em http://127.0.0.
 
 Para testar o site contra a API local: `index.html?agendaApi=http://127.0.0.1:8787`.
 
+### No Windows (PowerShell)
+
+O `echo ... > .dev.vars` do PowerShell 5.1 grava o arquivo em UTF-16, o wrangler não consegue lê-lo e o login do painel falha com "Servidor sem SESSION_SECRET configurado". Use os comandos abaixo, ou rode os de cima no Git Bash.
+
+```powershell
+Set-Content .dev.vars "SESSION_SECRET=qualquer-coisa-local" -Encoding ascii
+npm run db:migrar:local
+npx wrangler d1 execute agenda --local --file seed/tathiana-cairo.sql
+$sql = node scripts/senha.mjs tathiana-cairo "senha-de-teste-123"
+npx wrangler d1 execute agenda --local --command "$sql"
+npm run dev
+```
+
+Se a porta 8787 já estiver ocupada por um `wrangler dev` antigo, encerre-o (Ctrl+C no terminal dele) ou use `npx wrangler dev --port 8788`. Depois de mudar o `.dev.vars`, reinicie o `npm run dev`.
+
 ## Confirmar com a Dra. Tathiana
 
 - [ ] Duração de cada tratamento (hoje estimada: 60 min; tecnologias 45; terapias manuais 90).
