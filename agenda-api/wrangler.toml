@@ -10,7 +10,7 @@ binding = "ASSETS"
 [[d1_databases]]
 binding = "DB"
 database_name = "agenda"
-database_id = "PREENCHER-com-o-id-do-wrangler-d1-create"
+database_id = "cfb93764-e651-4930-bb94-e55c6a0d5ac1"
 migrations_dir = "migrations"
 
 # Segredo da sessão do painel: `npx wrangler secret put SESSION_SECRET`
